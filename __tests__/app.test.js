@@ -29,6 +29,10 @@ describe('app routes', () => {
           'mix ingredients',
           'put dough on cookie sheet',
           'bake for 10 minutes'
+        ],
+        ingredients: [
+          { name: 'milk', measurement: 'cups', amount: 2 },
+          { name: 'sugar', measurement: 'cups', amount: 1.5 }
         ]
       })
       .then(res => {
@@ -41,6 +45,10 @@ describe('app routes', () => {
             'put dough on cookie sheet',
             'bake for 10 minutes'
           ],
+          ingredients: [
+            { _id: expect.any(String), name: 'milk', measurement: 'cups', amount: 2 },
+            { _id: expect.any(String), name: 'sugar', measurement: 'cups', amount: 1.5 }
+          ],
           __v: 0
         });
       });
@@ -48,9 +56,9 @@ describe('app routes', () => {
 
   it('gets all recipes', async() => {
     const recipes = await Recipe.create([
-      { name: 'cookies', directions: [] },
-      { name: 'cake', directions: [] },
-      { name: 'pie', directions: [] }
+      { name: 'cookies', directions: [], ingredients: [] },
+      { name: 'cake', directions: [], ingredients: [] },
+      { name: 'pie', directions: [], ingredients: [] }
     ]);
 
     return request(app)
@@ -74,6 +82,10 @@ describe('app routes', () => {
         'put dough on cookie sheet',
         'bake for 10 minutes'
       ],
+      ingredients: [
+        { name: 'milk', measurement: 'cups', amount: 2 },
+        { name: 'sugar', measurement: 'cups', amount: 1.5 }
+      ]
     });
 
     return request(app)
@@ -81,13 +93,17 @@ describe('app routes', () => {
       .send({ name: 'good cookies' })
       .then(res => {
         expect(res.body).toEqual({
-          _id: expect.any(String),
+          _id: recipe._id.toString(),
           name: 'good cookies',
           directions: [
             'preheat oven to 375',
             'mix ingredients',
             'put dough on cookie sheet',
             'bake for 10 minutes'
+          ],
+          ingredients: [
+            { _id: expect.any(String), name: 'milk', measurement: 'cups', amount: 2 },
+            { _id: expect.any(String), name: 'sugar', measurement: 'cups', amount: 1.5 }
           ],
           __v: 0
         });
