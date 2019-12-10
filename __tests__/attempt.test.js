@@ -62,4 +62,27 @@ describe('attempt routes', () => {
         });
       });
   });
+
+  it('can get an attempt by id and update it', async() => {
+    const attempt = await Attempt.create({
+      recipeId: 5,
+      dateOfEvent: '2019-12-10',
+      notes: 'this is a note',
+      rating: 3
+    });
+
+    return request(app)
+      .patch(`/api/v1/attempts/${attempt._id}`)
+      .send({ recipeId: 1 })
+      .then(res => {
+        expect(res.body).toEqual({
+          _id: attempt._id.toString(),
+          recipeId: 1,
+          dateOfEvent: attempt.dateOfEvent.toISOString(),
+          notes: 'this is a note',
+          rating: 3,
+          __v: 0
+        });
+      });
+  });
 });
